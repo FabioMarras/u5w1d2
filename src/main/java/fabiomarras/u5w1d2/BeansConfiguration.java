@@ -3,7 +3,9 @@ package fabiomarras.u5w1d2;
 import fabiomarras.u5w1d2.entities.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,7 +15,7 @@ public class BeansConfiguration {
     //PIZZE
 
     @Bean
-    Pizzas PizzaIMargherita(List<Toppings> allTopings) {
+    Pizzas PizzaIMargherita() {
         List<Toppings> margheritaToppings = Arrays.asList();
         return new Pizzas("Margherita",  1104,4.99 , margheritaToppings);
     }
@@ -24,7 +26,7 @@ public class BeansConfiguration {
     }
 
     @Bean
-    Pizzas PizzaHawaiian(List<Toppings> allTopings) {
+    Pizzas PizzaHawaiian() {
         List<Toppings> HawaiianToppings = Arrays.asList(Ham(), Pineaaple());
         return new Pizzas("Hawaiian", (1104 + Ham().getCalories() + Pineaaple().getCalories()), (4.99 + Ham().getPrice() + Pineaaple().getPrice()), HawaiianToppings);
     }
@@ -36,23 +38,23 @@ public class BeansConfiguration {
     }
     @Bean
     public List<Pizzas> allPizzas(List<Toppings> allTopings) {
-        return Arrays.asList(PizzaIMargherita(allTopings), PizzaIMargheritaXL(allTopings), PizzaSalami(allTopings), PizzaHawaiian(allTopings));
+        return Arrays.asList(PizzaIMargherita(), PizzaIMargheritaXL(allTopings), PizzaSalami(allTopings), PizzaHawaiian());
     }
 
     //DRINKS
     @Bean
     public Drinks lemonade() {
-        return new Drinks("Lemonade", "128", "1.29$");
+        return new Drinks("Lemonade", "128", 1.29);
     }
 
     @Bean
     public Drinks water() {
-        return new Drinks("Water", "0", "1.29$");
+        return new Drinks("Water", "0", 1.29);
     }
 
     @Bean
     public Drinks wine() {
-        return new Drinks("Wine", "607", "7.49$");
+        return new Drinks("Wine", "607", 7.49);
     }
     @Bean
     public List<Drinks> allDrinks() {
@@ -115,5 +117,18 @@ public class BeansConfiguration {
     @Bean
     Table tavolo4() {
         return new Table(4,4, StatusTavolo.OCCUPATO);
+    }
+
+    @Bean
+    Order ordine1() {
+        List<Object> order1elements = Arrays.asList(PizzaIMargherita(), PizzaHawaiian(), lemonade());
+        int numeroCoperti = 1;
+        Table tavoloOrdine = tavolo2();
+        if (numeroCoperti > tavoloOrdine.getNumeroCopertiMax()) {
+            System.err.println("Tavolo troppo piccolo");
+            return null;
+        } else {
+            return new Order(1, StatusOrder.IN_CORSO, numeroCoperti, LocalDate.now(), tavoloOrdine, order1elements, (PizzaIMargherita().getPrice() + PizzaHawaiian().getPrice() + lemonade().getPrice()));
+        }
     }
 }

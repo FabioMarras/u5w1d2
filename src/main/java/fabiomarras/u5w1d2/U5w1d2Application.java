@@ -20,6 +20,7 @@ public class U5w1d2Application {
 //		System.out.println(ctx.getBean("allMenù"));
 		System.out.println(ctx.getBean("PizzaIMargherita"));
 //		System.out.println(ctx.getBean("tavolo3"));
+		System.out.println(ctx.getBean("ordine1"));
 
 
 		ctx.close();
