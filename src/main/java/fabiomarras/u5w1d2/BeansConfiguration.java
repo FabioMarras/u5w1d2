@@ -1,15 +1,19 @@
 package fabiomarras.u5w1d2;
 
 import fabiomarras.u5w1d2.entities.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
 @Configuration
+@PropertySource("application.properties")
 public class BeansConfiguration {
 
     //PIZZE
@@ -120,15 +124,15 @@ public class BeansConfiguration {
     }
 
     @Bean
-    Order ordine1() {
+    Order ordine1(@Value("${priceCoperto}") double priceCoperto) {
         List<Object> order1elements = Arrays.asList(PizzaIMargherita(), PizzaHawaiian(), lemonade());
-        int numeroCoperti = 1;
+        int numeroCoperti = 2;
         Table tavoloOrdine = tavolo2();
         if (numeroCoperti > tavoloOrdine.getNumeroCopertiMax()) {
             System.err.println("Tavolo troppo piccolo");
             return null;
         } else {
-            return new Order(1, StatusOrder.IN_CORSO, numeroCoperti, LocalDate.now(), tavoloOrdine, order1elements, (PizzaIMargherita().getPrice() + PizzaHawaiian().getPrice() + lemonade().getPrice()));
+            return new Order(1, StatusOrder.IN_CORSO, numeroCoperti, LocalDateTime.now(), tavoloOrdine, order1elements, (PizzaIMargherita().getPrice() + PizzaHawaiian().getPrice() + lemonade().getPrice() + priceCoperto*numeroCoperti));
         }
     }
 }
