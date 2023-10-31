@@ -1,9 +1,6 @@
 package fabiomarras.u5w1d2;
 
-import fabiomarras.u5w1d2.entities.Drinks;
-import fabiomarras.u5w1d2.entities.Menù;
-import fabiomarras.u5w1d2.entities.Pizzas;
-import fabiomarras.u5w1d2.entities.Toppings;
+import fabiomarras.u5w1d2.entities.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -100,5 +97,23 @@ public class BeansConfiguration {
     @Bean
     public Menù allMenù (List<Pizzas> pizzas, List<Drinks> drinks, List<Toppings> toppings) {
         return new Menù(pizzas, drinks, toppings);
+    }
+
+    //TABLE
+    @Bean
+    Table tavolo1() {
+        return new Table(1,6, StatusTavolo.LIBERO);
+    }
+    @Bean
+    Table tavolo2() {
+        return new Table(2,2, StatusTavolo.LIBERO);
+    }
+    @Bean
+    Table tavolo3() {
+        return new Table(3,10, StatusTavolo.LIBERO);
+    }
+    @Bean
+    Table tavolo4() {
+        return new Table(4,4, StatusTavolo.OCCUPATO);
     }
 }
